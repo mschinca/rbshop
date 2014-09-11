@@ -43,6 +43,13 @@ void rbshop_init_image(){
     rbshop_image_save, //what C function
     -1
   );
+
+  rb_define_method(
+    rb_cRbshopImage,  //where I define this
+    "oil_paint", //method name in ruby
+    rbshop_image_oil_paint, //what C function
+    0
+  );
 }
 
 void rbshop_image_free(MagickWand *wand){
@@ -134,5 +141,12 @@ VALUE rbshop_image_save(int argc, VALUE *argv, VALUE self){
   }
 
   MagickWriteImage(wand, path);
+  return self;
+}
+
+VALUE rbshop_image_oil_paint(VALUE self) {
+  MagickWand *wand = rbshop_image_get(self);
+
+  MagickOilPaintImage(wand, 15);
   return self;
 }

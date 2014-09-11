@@ -17,5 +17,6 @@ VALUE rbshop_image_get_height(VALUE self);
 
 //var num of arguments
 VALUE rbshop_image_save(int argc, VALUE *argv, VALUE self);
+VALUE rbshop_image_oil_paint(VALUE self); //no params
 
 #endif /* IMAGE_H */
