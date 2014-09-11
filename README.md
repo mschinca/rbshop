@@ -27,3 +27,9 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+1) Implement the swirl
+
+TIP: magickSwirlImage(wand, degrees)
+
+2) Implement #oil_paint and #swirl with parameter radius or degree

@@ -1,5 +1,7 @@
 #include "image.h"
 
+#define VARIABLE_ARGUMENTS -1
+
 extern VALUE rb_mRbshop; /* it's a ruby type, defined in rbshop.c */
 
 VALUE rb_cRbshopImage;
@@ -48,7 +50,7 @@ void rbshop_init_image(){
     rb_cRbshopImage,  //where I define this
     "oil_paint", //method name in ruby
     rbshop_image_oil_paint, //what C function
-    0
+    -1
   );
 }
 
@@ -144,9 +146,25 @@ VALUE rbshop_image_save(int argc, VALUE *argv, VALUE self){
   return self;
 }
 
-VALUE rbshop_image_oil_paint(VALUE self) {
+VALUE rbshop_image_oil_paint(int argc, VALUE *argv, VALUE self) {
   MagickWand *wand = rbshop_image_get(self);
 
-  MagickOilPaintImage(wand, 15);
+  int radius;
+
+  VALUE rb_radius;
+  //why ampersand?
+  rb_scan_args(argc, argv, "01", &rb_radius);
+
+  if( RTEST(rb_radius)){
+    // I was given a path
+    Check_Type(rb_radius, T_FIXNUM);
+    radius = NUM2INT(rb_radius);
+
+  } else {
+    // I wasn't given a path
+    radius = 15;
+  }
+
+  MagickOilPaintImage(wand, radius);
   return self;
 }
