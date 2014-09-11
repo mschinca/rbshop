@@ -28,6 +28,32 @@ VALUE
 rbshop_image_load(VALUE klass, VALUE rb_path){
   // insert a type check, it is a macro
   Check_Type(rb_path, T_STRING);
-  return Qnil; //global variable
+
+  // get the path as C string
+  char *path;
+  path = StringValueCStr(rb_path); // give me the c address of where the var lives
+
+  //we have the  path, now we load the image
+  //initialize the GraphicsMagick handler
+  MagickWand *wand;
+  wand = NewMagickWand();
+
+  //load the image
+  if(!MagickReadImage(wand, path)){
+    DestroyMagickWand(wand);  // freeing memory, if read fails I have to clean memory
+    return Qnil;
+  }
+
+  //I have a C type, which is still useless
+  //I need to wrap a Ruby object with our C type
+
+  VALUE instance;
+  instance = Data_Wrap_Struct(
+    rb_cRbshopImage,   //the type of the instance
+    0,                 //GC mark function, telling the GC not to clean this object up
+    rbshop_image_free, //GC callback
+    wand //I'm wrapping the wand library
+    );
+  return instance;
 }
 
