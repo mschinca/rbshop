@@ -26,6 +26,6 @@ void rbshop_init_image(){
 
 VALUE
 rbshop_image_load(VALUE klass, VALUE rb_path){
-  return rb_path;
+  return rb_path; // return "asd" would fail, can't return c objects but only ruby objects
 }
 
