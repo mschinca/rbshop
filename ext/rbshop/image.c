@@ -22,6 +22,13 @@ void rbshop_init_image(){
     1                  // number of arguments
   );
 
+  //Rbshop::Image#width
+  rb_define_method(
+    rb_cRbshopImage,  //where I define this
+    "width", //method name in ruby
+    rbshop_image_get_width, //what C function
+    0
+  );
 }
 
 void rbshop_image_free(MagickWand *wand){
