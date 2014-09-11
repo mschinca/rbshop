@@ -29,6 +29,13 @@ void rbshop_init_image(){
     rbshop_image_get_width, //what C function
     0
   );
+
+  rb_define_method(
+    rb_cRbshopImage,  //where I define this
+    "height", //method name in ruby
+    rbshop_image_get_height, //what C function
+    0
+  );
 }
 
 void rbshop_image_free(MagickWand *wand){
@@ -69,6 +76,18 @@ rbshop_image_load(VALUE klass, VALUE rb_path){
 }
 
 VALUE rbshop_image_get_width(VALUE self) {
+  MagickWand *wand;
+  Data_Get_Struct(
+    self,         // What ruby object I'm getting it from
+    MagickWand,   // What is the C type?
+    wand          // Where do I set it?
+  );
+
+  unsigned long width = MagickGetImageWidth(wand);
+  return INT2NUM(width); //grabs a c number and converts it to a ruby numeric type
+}
+
+VALUE rbshop_image_get_height(VALUE self) {
   MagickWand *wand;
   Data_Get_Struct(
     self,         // What ruby object I'm getting it from
