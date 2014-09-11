@@ -26,6 +26,8 @@ void rbshop_init_image(){
 
 VALUE
 rbshop_image_load(VALUE klass, VALUE rb_path){
-  return rb_path; // return "asd" would fail, can't return c objects but only ruby objects
+  // insert a type check, it is a macro
+  Check_Type(rb_path, T_STRING);
+  return Qnil; //global variable
 }
 
