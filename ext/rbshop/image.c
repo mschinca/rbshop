@@ -11,4 +11,14 @@ void rbshop_init_image(){
     "Image",  // the name of the class
     rb_cObject  //The class parent, it inherhits from Object
   );
+
+  //load class methods
+  // Rbshop::Image.load(path)
+
+  rb_define_singleton_method(
+    rb_cRbshopImage,   // where I define this,
+    "load",            //method name
+    rbshop_image_load, //what c function do I call
+    1                  // number of arguments
+  );
 }
