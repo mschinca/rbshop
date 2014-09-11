@@ -21,4 +21,11 @@ void rbshop_init_image(){
     rbshop_image_load, //what c function do I call
     1                  // number of arguments
   );
+
 }
+
+VALUE
+rbshop_image_load(VALUE klass, VALUE rb_path){
+  return rb_path;
+}
+
