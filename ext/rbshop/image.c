@@ -36,11 +36,30 @@ void rbshop_init_image(){
     rbshop_image_get_height, //what C function
     0
   );
+
+  rb_define_method(
+    rb_cRbshopImage,  //where I define this
+    "save", //method name in ruby
+    rbshop_image_save, //what C function
+    -1
+  );
 }
 
 void rbshop_image_free(MagickWand *wand){
   DestroyMagickWand(wand);
 }
+
+MagickWand *rbshop_image_get(VALUE self){
+  MagickWand *wand;
+  Data_Get_Struct(
+    self,
+    MagickWand,
+    wand
+  );
+
+  return wand;
+}
+
 
 VALUE
 rbshop_image_load(VALUE klass, VALUE rb_path){
@@ -76,12 +95,7 @@ rbshop_image_load(VALUE klass, VALUE rb_path){
 }
 
 VALUE rbshop_image_get_width(VALUE self) {
-  MagickWand *wand;
-  Data_Get_Struct(
-    self,         // What ruby object I'm getting it from
-    MagickWand,   // What is the C type?
-    wand          // Where do I set it?
-  );
+  MagickWand *wand = rbshop_image_get(self);
 
   unsigned long width = MagickGetImageWidth(wand);
   return INT2NUM(width); //grabs a c number and converts it to a ruby numeric type
@@ -97,4 +111,28 @@ VALUE rbshop_image_get_height(VALUE self) {
 
   unsigned long width = MagickGetImageWidth(wand);
   return INT2NUM(width); //grabs a c number and converts it to a ruby numeric type
+}
+
+VALUE rbshop_image_save(int argc, VALUE *argv, VALUE self){
+  MagickWand *wand = rbshop_image_get(self); // get the C object
+
+  VALUE rb_path; //extract the path that might or might not be there
+  //why ampersand?
+  rb_scan_args(argc, argv, "01", &rb_path); //required + optional | where to put those values if they exists
+
+  char *path;
+
+  // if (argc == 1)
+  if( RTEST(rb_path)){
+    // I was given a path
+    Check_Type(rb_path, T_STRING);
+    path = StringValueCStr(rb_path);
+
+  } else {
+    // I wasn't given a path
+    path = MagickGetFilename(wand);
+  }
+
+  MagickWriteImage(wand, path);
+  return self;
 }
