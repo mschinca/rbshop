@@ -24,6 +24,10 @@ void rbshop_init_image(){
 
 }
 
+void rbshop_image_free(MagickWand *wand){
+  DestroyMagickWand(wand);
+}
+
 VALUE
 rbshop_image_load(VALUE klass, VALUE rb_path){
   // insert a type check, it is a macro

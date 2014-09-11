@@ -4,6 +4,8 @@
 #include "rbshop.h"
 
 void rbshop_init_image();
+void rbshop_image_free(MagickWand *wand);
+
 
 //load an image: class method
 // function declaration
